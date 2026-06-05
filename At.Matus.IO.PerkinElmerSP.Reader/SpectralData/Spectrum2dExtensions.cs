@@ -6,7 +6,6 @@
 //              comments and JSON metadata output.
 // 
 // Copyright (c) 2026 Michael Matus
-// All rights reserved.
 // ============================================================================
 
 using System.Text.Encodings.Web;

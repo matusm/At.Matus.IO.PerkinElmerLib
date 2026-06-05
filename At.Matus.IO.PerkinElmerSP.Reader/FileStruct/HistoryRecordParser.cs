@@ -21,8 +21,7 @@
 //              the second short integer (id2) indicates the length of the record text plus 4 for text records, or is 8 for short integer records, or 14 for double records,
 //              and the third short integer (id3) is always 0.
 //
-// Author:      Michael Matus
-// Created:     01.06.2026
+// Copyright (c) 2026 Michael Matus
 // ==============================================================================
 
 using System.Text;

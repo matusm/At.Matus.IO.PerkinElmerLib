@@ -7,7 +7,6 @@
 //              calculation for parsing sequential history records.
 // 
 // Copyright (c) 2026 Michael Matus
-// All rights reserved.
 // ============================================================================
 
 namespace At.Matus.IO.PerkinElmerSP.Reader

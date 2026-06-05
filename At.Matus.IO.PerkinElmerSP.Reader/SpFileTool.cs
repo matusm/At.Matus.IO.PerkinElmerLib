@@ -8,7 +8,6 @@
 //              adapted for C#.NET by Kutukov Pavel (2022).
 // 
 // Copyright (c) 2026 Michael Matus
-// 
 // ============================================================================
 
 using System.Globalization;

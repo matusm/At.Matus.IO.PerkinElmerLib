@@ -1,13 +1,18 @@
-﻿using System.Text;
+﻿// ============================================================================
+// File: BlockFile.cs
+// Project: At.Matus.IO.PerkinElmerSP.Reader
+// Description: Represents the overall structure of a PerkinElmer SP binary file.
+//              Contains a PEPE magic header with 40-byte content description
+//              followed by an array of blocks with ID, size, and binary content.
+//              Provides file validation and block parsing functionality.
+// 
+// Copyright (c) 2026 Michael Matus
+// ============================================================================
+
+using System.Text;
 
 namespace At.Matus.IO.PerkinElmerSP.Reader
 {
-    /// <summary>
-    /// Overall structure:
-    /// Header = PEPE magic header + 40-byte content description string
-    /// Contents = an array of blocks with id, size and some binary content
-    /// </summary>
-    /// <seealso cref="Block"/>
     public class BlockFile
     {
         public string Description { get; }

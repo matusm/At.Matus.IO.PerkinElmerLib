@@ -7,7 +7,6 @@
 //              resolution, and labels), and spectral point data arrays.
 // 
 // Copyright (c) 2026 Michael Matus
-// All rights reserved.
 // ============================================================================
 
 using At.Matus.MetaData;
