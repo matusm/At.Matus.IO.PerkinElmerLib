@@ -35,7 +35,7 @@ namespace Sp2Csv
             try
             {
                 var reader = new SpFileTool();
-                reader.IncludUnknownBlocksInMetaData = true; // for reverse engineering purposes, set to true to include all unknown blocks in the metadata
+                reader.IncludUnknownBlocksInMetaData = false; // for reverse engineering purposes, set to true to include all unknown blocks in the metadata
                 var spectrum = reader.GetData(inputPath);
                 using (var writer = new StreamWriter(outputPath, false, System.Text.Encoding.UTF8))
                 {

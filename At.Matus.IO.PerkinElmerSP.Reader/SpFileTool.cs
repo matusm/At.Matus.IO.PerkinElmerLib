@@ -11,14 +11,11 @@
 // 
 // ============================================================================
 
+using System.Globalization;
 using System.Text;
 
 namespace At.Matus.IO.PerkinElmerSP.Reader
 {
-    /// <summary>
-    /// Based on the code for Matlab(R) by Stephen Westlake and Seer Green from Perkin Elmer (2007)
-    /// Adapted for OOP and C#.NET by Kutukov Pavel, 2022
-    /// </summary>
     public class SpFileTool
     {
         public bool IncludUnknownBlocksInMetaData { get; set; } = false;
@@ -56,6 +53,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
 
         private void GetSpectrumWrapper(TypedMemberBlock tmb, Spectrum2d sp)
         {
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             switch ((Members)tmb.Id)
             {
                 case Members.DataSetAbscissaRange:
