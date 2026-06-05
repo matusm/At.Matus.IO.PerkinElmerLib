@@ -19,8 +19,8 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
         public double StartX { get; set; }
         public double EndX { get; set; }
         public double ResolutionX { get; set; }
-        public string LabelX { get; set; }
-        public string LabelY { get; set; }
-        public Point2d[] Points { get; set; }
+        public string LabelX { get; set; } = string.Empty;
+        public string LabelY { get; set; } = string.Empty;
+        public Point2d[] Points { get; set; } = Array.Empty<Point2d>();
     }
 }

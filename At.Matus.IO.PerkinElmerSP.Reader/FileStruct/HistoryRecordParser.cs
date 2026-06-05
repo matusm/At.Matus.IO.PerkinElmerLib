@@ -33,8 +33,10 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
         public HistoryRecordParser(TypedMemberBlock tmb)
         {
             if (tmb.Id != (short)Members.DataSetHistoryRecord)
-                throw new NotSupportedException("Not supported data type for history record.");
-            _tmb = tmb;
+                throw new NotSupportedException("Unsupported data type for history record.");
+            if (tmb.Data == null)
+                throw new InvalidOperationException("TypedMemberBlock.Data is null.");
+            _data = tmb.Data!;
         }
 
         public Dictionary<string, string> GetHistoryRecordsAsDictionary(bool includeUnknowns = false)
@@ -49,11 +51,8 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
 
         public HistoryRecordEntry[] GetHistoryRecordsAsObjects()
         {
-            if (_tmb.Data == null)
-                throw new InvalidOperationException("TypedMemberBlock.Data is null.");
-
             List<HistoryRecordEntry> records = new List<HistoryRecordEntry>();
-            for (int i = 6; i < _tmb.Data.Length - 4; i++)
+            for (int i = 6; i < _data.Length - 4; i++)
             {
                 var recordType = ScanForHistoryRecords(i);
                 if (recordType != HistoryRecordValueType.Unknown)
@@ -64,7 +63,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
                     switch (recordType)
                     {
                         case HistoryRecordValueType.Text:
-                            historyRecord.RecordText = Encoding.Default.GetString(_tmb.Data, i + 4, GetRecordId4(i));
+                            historyRecord.RecordText = Encoding.Default.GetString(_data, i + 4, GetRecordId4(i));
                             break;
                         case HistoryRecordValueType.Short:
                         case HistoryRecordValueType.ShortX:
@@ -85,16 +84,16 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
 
         private HistoryRecordValueType ScanForHistoryRecords(int index)
         {
-            if (_tmb.Data[index] == 0x23 && _tmb.Data[index + 1] == 0x75) // #u
+            if (_data[index] == 0x23 && _data![index + 1] == 0x75) // #u
                 if (GetRecordId3(index) == 0 && GetRecordId2(index) - GetRecordId4(index) == 4)
                     return HistoryRecordValueType.Text;
-            if (_tmb.Data[index] == 0x2D && _tmb.Data[index + 1] == 0x75) // -u
+            if (_data[index] == 0x2D && _data![index + 1] == 0x75) // -u
                 if (GetRecordId3(index) == 0 && GetRecordId2(index) == 8)
                     return HistoryRecordValueType.Short;
-            if (_tmb.Data[index] == 0x1C && _tmb.Data[index + 1] == 0x75) // .u
+            if (_data[index] == 0x1C && _data[index + 1] == 0x75) // .u
                 if (GetRecordId3(index) == 0 && GetRecordId2(index) == 14)
                     return HistoryRecordValueType.Double;
-            if (_tmb.Data[index] == 0x15 && _tmb.Data[index + 1] == 0x75) // 0x15u
+            if (_data[index] == 0x15 && _data[index + 1] == 0x75) // 0x15u
                 if (GetRecordId3(index) == 0 && GetRecordId2(index) == 4)
                     return HistoryRecordValueType.ShortX;
             return HistoryRecordValueType.Unknown;
@@ -102,29 +101,29 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
 
         private short GetRecordId1(int index)
         {
-            return BitConverter.ToInt16(new byte[] { _tmb.Data[index - 6], _tmb.Data[index - 5] }, 0);
+            return BitConverter.ToInt16(new byte[] { _data[index - 6], _data[index - 5] }, 0);
         }
 
         private short GetRecordId2(int index)
         {
-            return BitConverter.ToInt16(new byte[] { _tmb.Data[index - 4], _tmb.Data[index - 3] }, 0);
+            return BitConverter.ToInt16(new byte[] { _data[index - 4], _data[index - 3] }, 0);
         }
 
         private short GetRecordId3(int index)
         {
-            return BitConverter.ToInt16(new byte[] { _tmb.Data[index - 2], _tmb.Data[index - 1] }, 0);
+            return BitConverter.ToInt16(new byte[] { _data[index - 2], _data[index - 1] }, 0);
         }
 
         private short GetRecordId4(int index)
         {
-            return BitConverter.ToInt16(new byte[] { _tmb.Data[index + 2], _tmb.Data[index + 3] }, 0);
+            return BitConverter.ToInt16(new byte[] { _data[index + 2], _data[index + 3] }, 0);
         }
 
         private double GetRecordDoubleValue(int index)
         {
-            return BitConverter.ToDouble(new byte[] { _tmb.Data[index + 2], _tmb.Data[index + 3], _tmb.Data[index + 4], _tmb.Data[index + 5], _tmb.Data[index + 6], _tmb.Data[index + 7], _tmb.Data[index + 8], _tmb.Data[index + 9] }, 0);
+            return BitConverter.ToDouble(new byte[] { _data[index + 2], _data[index + 3], _data[index + 4], _data[index + 5], _data[index + 6], _data[index + 7], _data[index + 8], _data[index + 9] }, 0);
         }
 
-        private readonly TypedMemberBlock _tmb;
+        private readonly byte[] _data;
     }
 }

@@ -26,8 +26,8 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
             Block main = BlockFile.Load(path).Contents.FirstOrDefault(x => x.Id == (short)mainBlock);
             if (main == null)
                 throw new NotSupportedException($"This SP file doesn't contain a {Enum.GetName(typeof(Blocks), mainBlock)} block.");
-            var spec = new Spectrum2d();
-            foreach (var item in ParseMembers(main.Data))
+            Spectrum2d spec = new Spectrum2d();
+            foreach (TypedMemberBlock item in ParseMembers(main.Data))
             {
                 GetSpectrumWrapper(item, spec);
             }

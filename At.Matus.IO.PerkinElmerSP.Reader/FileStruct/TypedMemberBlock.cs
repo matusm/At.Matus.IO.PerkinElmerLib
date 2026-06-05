@@ -30,6 +30,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
         public string DumpDataAsHex()
         {
             string dataString = string.Empty;
+            if(Data == null) return dataString;
             foreach (byte b in Data)
             {
                 dataString += $"{b:X2} ";
@@ -37,6 +38,6 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
             return dataString.TrimEnd();
         }
 
-        public override string ToString() => $"TypedMemberBlock: Id={(Members)Id} dataLength={Data.Length} TypeCode={(TypeCodes)TypeCode}";
+        public override string ToString() => $"TypedMemberBlock: Id={(Members)Id} dataLength={(Data == null ? 0 : Data.Length)} TypeCode={(TypeCodes)TypeCode}";
     }
 }

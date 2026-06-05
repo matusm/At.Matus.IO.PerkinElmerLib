@@ -15,12 +15,12 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
     {
         public int ID { get; set; }
         public string RecordText { get; set; } = string.Empty;
-        public string KeyName => ToKeyName(ID);
+        public string KeyName => ConvertToKeyName(ID);
         public bool IsKnownRecord => Enum.IsDefined(typeof(HistoryRecordTitle), ID);
         public int AdvanceBy => CalculateOffset(); // Advance scan index by this number of bytes to get to the next record
         public HistoryRecordValueType ValueType { get; set; } = HistoryRecordValueType.Unknown;
 
-        private string ToKeyName(int code)
+        private string ConvertToKeyName(int code)
         {
             if (IsKnownRecord)
                 return ((HistoryRecordTitle)code).ToString();
@@ -54,6 +54,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
                 case HistoryRecordValueType.Text:
                     return RecordText.Length + 4; // for text records, length is the length of the text plus 4 bytes for the length field
                 case HistoryRecordValueType.Short:
+                case HistoryRecordValueType.ShortX:
                     return 4;
                 case HistoryRecordValueType.Double:
                     return 10; // for double records, length is always 14 bytes
