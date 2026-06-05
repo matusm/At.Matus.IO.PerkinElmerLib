@@ -8,6 +8,7 @@
 // Copyright (c) 2026 Michael Matus
 // ============================================================================
 
+using System.Globalization;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
@@ -31,6 +32,19 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
             foreach (var point in spectrum.Points)
             {
                 w.WriteLine($"{point.X},{point.Y}");
+            }
+        }
+
+
+        // this is experimental only!
+        public static void WriteGermanText(this Spectrum2d spectrum, TextWriter w)
+        {
+            Array.Sort(spectrum.Points);
+            //Header
+            foreach (var point in spectrum.Points)
+            {
+                CultureInfo.CurrentCulture = new CultureInfo("de-DE");
+                w.WriteLine($"{point.X} {point.Y:F4}");
             }
         }
 

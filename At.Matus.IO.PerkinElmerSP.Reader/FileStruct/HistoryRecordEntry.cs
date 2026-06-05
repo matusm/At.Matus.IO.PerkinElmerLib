@@ -14,7 +14,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
     public class HistoryRecordEntry
     {
         public int ID { get; set; }
-        public string RecordText { get; set; }
+        public string RecordText { get; set; } = string.Empty;
         public string KeyName => ToKeyName(ID);
         public bool IsKnownRecord => Enum.IsDefined(typeof(HistoryRecordTitle), ID);
         public int AdvanceBy => CalculateOffset(); // Advance scan index by this number of bytes to get to the next record

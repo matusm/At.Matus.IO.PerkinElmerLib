@@ -12,6 +12,7 @@ namespace Sp2Csv
             string inputPath = string.Empty;
             string outputPath = string.Empty;
             string jsonPath = string.Empty;
+            string textPath = string.Empty;
 
             #region CLI Argument Parsing
             switch (args.Length)
@@ -20,6 +21,7 @@ namespace Sp2Csv
                     inputPath = args[0];
                     outputPath = Path.ChangeExtension(inputPath, ".csv");
                     jsonPath = Path.ChangeExtension(inputPath, ".json");
+                    textPath = Path.ChangeExtension(inputPath, ".txt");
                     break;
                 case 2:
                     inputPath = args[0];
@@ -45,6 +47,10 @@ namespace Sp2Csv
                 using (var writer = new StreamWriter(jsonPath, false, System.Text.Encoding.UTF8))
                 {
                     spectrum.WriteMetaDataAsJson(writer);
+                }
+                using (var writer = new StreamWriter(textPath, false, System.Text.Encoding.UTF8))
+                {
+                    spectrum.WriteGermanText(writer);
                 }
                 Console.WriteLine($"Successfully converted {inputPath} to {outputPath}");
             }

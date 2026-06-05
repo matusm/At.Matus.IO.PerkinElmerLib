@@ -49,6 +49,9 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
 
         public HistoryRecordEntry[] GetHistoryRecordsAsObjects()
         {
+            if (_tmb.Data == null)
+                throw new InvalidOperationException("TypedMemberBlock.Data is null.");
+
             List<HistoryRecordEntry> records = new List<HistoryRecordEntry>();
             for (int i = 6; i < _tmb.Data.Length - 4; i++)
             {

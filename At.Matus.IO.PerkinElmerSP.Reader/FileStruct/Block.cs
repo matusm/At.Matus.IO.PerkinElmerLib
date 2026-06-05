@@ -21,7 +21,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
     public class Block
     {
         public short Id { get; }
-        public byte[] Data { get; protected set; }
+        public byte[]? Data { get; protected set; }
 
         protected Block(short id)
         {
