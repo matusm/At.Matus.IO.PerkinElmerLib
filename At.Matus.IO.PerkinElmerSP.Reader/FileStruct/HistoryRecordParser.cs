@@ -92,12 +92,9 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
             if (_tmb.Data[index] == 0x1C && _tmb.Data[index + 1] == 0x75) // .u
                 if (GetRecordId3(index) == 0 && GetRecordId2(index) == 14)
                     return HistoryRecordValueType.Double;
-            if (_tmb.Data[index] == 0x15 && _tmb.Data[index + 1] == 0x75)
+            if (_tmb.Data[index] == 0x15 && _tmb.Data[index + 1] == 0x75) // 0x15u
                 if (GetRecordId3(index) == 0 && GetRecordId2(index) == 4)
-                {
-                    Console.WriteLine($"[15 75] ID1:{GetRecordId1(index)} ID2:{GetRecordId2(index)} ID3:{GetRecordId3(index)} ID4:{GetRecordId4(index)}");
                     return HistoryRecordValueType.ShortX;
-                }
             return HistoryRecordValueType.Unknown;
         }
 
