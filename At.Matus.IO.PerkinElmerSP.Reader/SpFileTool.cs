@@ -21,11 +21,15 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
 
         public Spectrum2d GetData(string path)
         {
+            if(path == null)
+                throw new ArgumentNullException(nameof(path));
             if (!BitConverter.IsLittleEndian)
                 throw new NotSupportedException("BigEndian architectures are not supported (yet).");
-            Block main = BlockFile.Load(path).Contents.FirstOrDefault(x => x.Id == (short)mainBlock);
+            Block main = BlockFile.Load(path).Contents.FirstOrDefault(x => x.Id == (short)mainBlock)!;
             if (main == null)
                 throw new NotSupportedException($"This SP file doesn't contain a {Enum.GetName(typeof(Blocks), mainBlock)} block.");
+            if(main.Data == null)
+                throw new ArgumentException("Main block contains no data.");
             Spectrum2d spec = new Spectrum2d();
             foreach (TypedMemberBlock item in ParseMembers(main.Data))
             {
@@ -52,6 +56,8 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
 
         private void GetSpectrumWrapper(TypedMemberBlock tmb, Spectrum2d sp)
         {
+            if(tmb.Data == null)
+                throw new ArgumentException("Data member block contains no data.");
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             switch ((Members)tmb.Id)
             {
@@ -148,7 +154,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
             {
                 while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
                 {
-                    TypedMemberBlock tmb = null;
+                    TypedMemberBlock tmb;
                     try
                     {
                         tmb = new TypedMemberBlock(binaryReader);
