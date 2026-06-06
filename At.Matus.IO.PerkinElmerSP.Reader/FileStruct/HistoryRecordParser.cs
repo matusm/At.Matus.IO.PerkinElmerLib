@@ -63,7 +63,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
                     switch (recordType)
                     {
                         case HistoryRecordValueType.Text:
-                            historyRecord.RecordText = Encoding.Default.GetString(_data, i + 4, GetRecordId4(i));
+                            historyRecord.RecordText = Encoding.Latin1.GetString(_data, i + 4, GetRecordId4(i));
                             break;
                         case HistoryRecordValueType.Short:
                         case HistoryRecordValueType.ShortX:
@@ -101,27 +101,27 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
 
         private short GetRecordId1(int index)
         {
-            return BitConverter.ToInt16(new byte[] { _data[index - 6], _data[index - 5] }, 0);
+            return BitConverter.ToInt16([_data[index - 6], _data[index - 5]], 0);
         }
 
         private short GetRecordId2(int index)
         {
-            return BitConverter.ToInt16(new byte[] { _data[index - 4], _data[index - 3] }, 0);
+            return BitConverter.ToInt16([_data[index - 4], _data[index - 3]], 0);
         }
 
         private short GetRecordId3(int index)
         {
-            return BitConverter.ToInt16(new byte[] { _data[index - 2], _data[index - 1] }, 0);
+            return BitConverter.ToInt16([_data[index - 2], _data[index - 1]], 0);
         }
 
         private short GetRecordId4(int index)
         {
-            return BitConverter.ToInt16(new byte[] { _data[index + 2], _data[index + 3] }, 0);
+            return BitConverter.ToInt16([_data[index + 2], _data[index + 3]], 0);
         }
 
         private double GetRecordDoubleValue(int index)
         {
-            return BitConverter.ToDouble(new byte[] { _data[index + 2], _data[index + 3], _data[index + 4], _data[index + 5], _data[index + 6], _data[index + 7], _data[index + 8], _data[index + 9] }, 0);
+            return BitConverter.ToDouble([_data[index + 2], _data[index + 3], _data[index + 4], _data[index + 5], _data[index + 6], _data[index + 7], _data[index + 8], _data[index + 9]], 0);
         }
 
         private readonly byte[] _data;

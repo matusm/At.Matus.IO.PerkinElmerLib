@@ -46,7 +46,7 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
             try
             {
                 int len = BitConverter.ToInt16(data, 0);
-                return Encoding.Default.GetString(data, 2, len);
+                return Encoding.Latin1.GetString(data, 2, len);
             }
             catch (ArgumentException)
             {

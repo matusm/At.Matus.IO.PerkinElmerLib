@@ -1,43 +1,65 @@
 ﻿using At.Matus.IO.PerkinElmerSP.Reader;
 using System.Globalization;
+using System.Reflection;
 
 namespace Sp2Csv
 {
-    public class Program
+    static class Program
     {
+
+        static bool recursiveOption = false;
+        static bool overwriteOption = false;
+        static bool debuggingOption = false;
+
         public static void Main(string[] args)
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
-            string inputPath = string.Empty;
-            string outputPath = string.Empty;
-            string jsonPath = string.Empty;
-            string textPath = string.Empty;
-
-            #region CLI Argument Parsing
-            switch (args.Length)
+            Console.WriteLine($"Perkin Elmer CSV {Assembly.GetExecutingAssembly().GetName().Version.ToString()} toolkit started!");
+            recursiveOption = args.Contains("-r");
+            overwriteOption = args.Contains("-o");
+            debuggingOption = args.Contains("-d");
+            Console.WriteLine($"Recursive folder processing: {recursiveOption}, Overwrite existing CSV: {overwriteOption}");
+            
+            List<string> files = new List<string>();
+            if (args.Length > 0)
             {
-                case 1:
-                    inputPath = args[0];
-                    outputPath = Path.ChangeExtension(inputPath, ".csv");
-                    jsonPath = Path.ChangeExtension(inputPath, ".json");
-                    textPath = Path.ChangeExtension(inputPath, ".txt");
-                    break;
-                case 2:
-                    inputPath = args[0];
-                    outputPath = args[1];
-                    jsonPath = Path.ChangeExtension(outputPath, ".json");
-                    break;
-                default:
-                    Console.WriteLine("Usage: Sp2Csv <input> [<output>]");
-                    return;
+                foreach (var item in args)
+                {
+                    files.AddRange(GetFileOrDir(item));
+                }
             }
-            #endregion
+            else
+            {
+                files.AddRange(Directory.GetFiles(Environment.CurrentDirectory));
+            }
 
+            IEnumerable<string> query = files.Where(f => string.Equals(Path.GetExtension(f), ".sp", StringComparison.OrdinalIgnoreCase)).ToList();            
+            if (!overwriteOption)
+            {
+                query = query.Where(x => !File.Exists(GetCsvOutputFilePath(x)));
+            }
+            files = query.ToList();
+            Console.WriteLine($"Info: total files to process = {files.Count}.");
+
+            foreach (var file in files)
+            {
+                ProcessFile(file);
+            }
+
+            Console.WriteLine("Finished.");
+
+        }
+
+        static void ProcessFile(string inputPath)
+        {
+            string outputPath = GetCsvOutputFilePath(inputPath);
+            string jsonPath = Path.ChangeExtension(inputPath, ".json");
+            string textPath = Path.ChangeExtension(inputPath, ".txt");
             try
             {
                 var reader = new SpFileTool();
-                reader.IncludUnknownBlocksInMetaData = false; // for reverse engineering purposes, set to true to include all unknown blocks in the metadata
+                reader.IncludUnknownBlocksInMetaData = debuggingOption;
                 var spectrum = reader.GetData(inputPath);
                 using (var writer = new StreamWriter(outputPath, false, System.Text.Encoding.UTF8))
                 {
@@ -56,9 +78,29 @@ namespace Sp2Csv
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Error: for file '{inputPath}', {Environment.NewLine}\t{ex}");
             }
         }
+
+        static string[] GetFileOrDir(string path)
+        {
+            if (File.Exists(path))
+            {
+                return new string[] { path };
+            }
+            else if (Directory.Exists(path))
+            {
+                return recursiveOption ? Directory.GetFiles(path, "*.*", SearchOption.AllDirectories)
+                    : Directory.GetFiles(path);
+            }
+            else
+            {
+                return new string[] { };
+            }
+        }
+
+        static string GetCsvOutputFilePath(string inputPath) => inputPath + ".csv";
+
     }
 }
 
