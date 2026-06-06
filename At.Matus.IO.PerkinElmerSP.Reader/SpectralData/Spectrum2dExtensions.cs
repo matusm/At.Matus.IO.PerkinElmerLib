@@ -35,19 +35,6 @@ namespace At.Matus.IO.PerkinElmerSP.Reader
             }
         }
 
-
-        // this is experimental only!
-        public static void WriteGermanText(this Spectrum2d spectrum, TextWriter w)
-        {
-            Array.Sort(spectrum.Points);
-            //Header
-            foreach (var point in spectrum.Points)
-            {
-                CultureInfo.CurrentCulture = new CultureInfo("de-DE");
-                w.WriteLine($"{point.X} {point.Y:F4}");
-            }
-        }
-
         public static void WriteMetaDataAsJson(this Spectrum2d spectrum, TextWriter w)
         {
             var json = DictionaryToPrettyJson(spectrum.MetaData.Records);

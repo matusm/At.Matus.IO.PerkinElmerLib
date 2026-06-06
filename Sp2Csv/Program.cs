@@ -75,7 +75,7 @@ namespace Sp2Csv
                 }
                 using (var writer = new StreamWriter(textPath, false, System.Text.Encoding.UTF8))
                 {
-                    spectrum.WriteGermanText(writer);
+                    spectrum.WriteGermanTextForExcel(writer);
                 }
                 Console.WriteLine($"Successfully converted {inputPath} to {outputPath}");
             }
