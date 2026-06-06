@@ -6,7 +6,6 @@ namespace Sp2Csv
 {
     static class Program
     {
-
         static bool recursiveOption = false;
         static bool overwriteOption = false;
         static bool debuggingOption = false;
@@ -15,12 +14,16 @@ namespace Sp2Csv
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
-            Console.WriteLine($"Perkin Elmer CSV {Assembly.GetExecutingAssembly().GetName().Version.ToString()} toolkit started!");
+            Console.WriteLine($"This is {Assembly.GetExecutingAssembly().GetName().Name.ToString()} version {Assembly.GetExecutingAssembly().GetName().Version.ToString()}");
+            Console.WriteLine();
             recursiveOption = args.Contains("-r");
             overwriteOption = args.Contains("-o");
             debuggingOption = args.Contains("-d");
-            Console.WriteLine($"Recursive folder processing: {recursiveOption}, Overwrite existing CSV: {overwriteOption}");
-            
+            Console.WriteLine($"Options:");
+            Console.WriteLine($"   Recursive folder processing (-r): {recursiveOption}");
+            Console.WriteLine($"   Overwrite existing CSV: (-o): {overwriteOption}");
+            Console.WriteLine($"   Include unknown keys (-d): {debuggingOption}");
+            Console.WriteLine();
             List<string> files = new List<string>();
             if (args.Length > 0)
             {
@@ -40,7 +43,8 @@ namespace Sp2Csv
                 query = query.Where(x => !File.Exists(GetCsvOutputFilePath(x)));
             }
             files = query.ToList();
-            Console.WriteLine($"Info: total files to process = {files.Count}.");
+            Console.WriteLine($"Total files to process = {files.Count}.");
+            Console.WriteLine();
 
             foreach (var file in files)
             {
@@ -48,7 +52,6 @@ namespace Sp2Csv
             }
 
             Console.WriteLine("Finished.");
-
         }
 
         static void ProcessFile(string inputPath)
@@ -99,7 +102,7 @@ namespace Sp2Csv
             }
         }
 
-        static string GetCsvOutputFilePath(string inputPath) => inputPath + ".csv";
+        static string GetCsvOutputFilePath(string inputPath) => Path.ChangeExtension(inputPath, ".csv");
 
     }
 }
