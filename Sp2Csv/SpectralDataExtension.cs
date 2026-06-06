@@ -1,4 +1,14 @@
-﻿using At.Matus.IO.PerkinElmerSP.Reader;
+﻿// ============================================================================
+// File: SpectralDataExtension.cs
+// Project: Sp2Csv
+// Description: Extension methods for the Spectrum2d class providing CSV export
+//              functionality formatted for German locale Excel compatibility,
+//              with optional sorting of spectral data points.
+// 
+// Copyright (c) 2026 Michael Matus
+// ============================================================================
+
+using At.Matus.IO.PerkinElmerSP.Reader;
 using System.Globalization;
 
 namespace Sp2Csv
