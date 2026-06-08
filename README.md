@@ -1,6 +1,6 @@
 # At.Matus.IO.PerkinElmerLib
 
-A .NET library for reading and parsing PerkinElmer SP (Spectrum) binary file format, extracting spectral data, metadata, and history records into structured objects.
+A .NET library for reading and parsing PerkinElmer SP (Spectrum) binary file format, extracting spectral data, metadata, and history records into structured objects. This library is based on (https://github.com/kutukvpavel/PerkinElmer2CSV)](https://github.com/kutukvpavel/PerkinElmer2CSV). The main difference ist the exhaustive handling of measurement metadata contained in the SP files.
 
 ## Overview
 
